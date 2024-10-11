@@ -1,7 +1,8 @@
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { AuthForm } from "../components/AuthForm"
 import { useIsAuthenticated } from "../hooks/useIsAuthenticated"
 import { useSaveNewUser } from "../hooks/useSaveNewUser"
+import { routes } from "../../routes"
 
 export const Register = () => {
   const { renderWithAuthentication } = useIsAuthenticated()
@@ -21,6 +22,9 @@ export const Register = () => {
         <AuthForm
           onSubmit={({ email, password }) => registerUser({ email, password })}
         />
+        <p>
+          Already Registered? <Link to={routes.LOGIN}>Login here</Link>
+        </p>
       </div>
     ),
   })
