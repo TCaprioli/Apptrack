@@ -6,9 +6,13 @@ export const isError = (e: any): e is Error => {
     e.message &&
     typeof e.stack === "string" &&
     typeof e.message === "string"
-  );
-};
+  )
+}
 
-export const getToken = (): string | null => {
-  return localStorage.getItem("authToken");
-};
+export const getToken = (): string => {
+  const token = localStorage.getItem("authToken")
+  if (token === null) {
+    throw new Error("Could not find token")
+  }
+  return token
+}
