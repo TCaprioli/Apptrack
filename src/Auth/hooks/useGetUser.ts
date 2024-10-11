@@ -8,15 +8,15 @@ export const useGetUser = (): {
 } => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  async function loginUser(
-    dispatch: ReturnType<typeof useAppDispatch>,
-    args: UserRequest
-  ) {
-    dispatch(login({ email: args.email, password: args.password }))
-    navigate("/applications")
+  async function loginUser(args: UserRequest) {
+    try {
+      dispatch(login({ email: args.email, password: args.password }))
+      navigate("/applications")
+    } catch {
+      console.error("login failed")
+    }
   }
   return {
-    loginUser: ({ email, password }) =>
-      loginUser(dispatch, { email, password }),
+    loginUser,
   }
 }
