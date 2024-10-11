@@ -1,22 +1,18 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { User } from "./types";
-import { UserApi } from "../Api/User";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { User } from "./types"
+import { UserApi } from "../Api/User"
+import { AsyncState, AsyncStateEnum } from "../types"
 
 export type UserState = {
-  data: User | null;
-  error: string | null;
-  loadState: {
-    init: boolean;
-    pending: boolean;
-    fulfilled: boolean;
-    rejected: boolean;
-  };
-};
+  data: User | null
+  error: string | null
+  loadState: AsyncState
+}
 const initialState: UserState = {
   data: null,
   error: null,
-  loadState: { init: true, pending: false, fulfilled: false, rejected: false },
-};
+  loadState: AsyncStateEnum.INIT,
+}
 
 export const login = createAsyncThunk<
   User | null,
@@ -25,10 +21,10 @@ export const login = createAsyncThunk<
   const user = await UserApi.login({
     email: userArgs.email,
     password: userArgs?.password,
-  });
-  localStorage.setItem("authToken", user.token);
-  return { id: user.id, email: user.email };
-});
+  })
+  localStorage.setItem("authToken", user.token)
+  return { id: user.id, email: user.email }
+})
 
 export const register = createAsyncThunk<
   User | null,
@@ -37,121 +33,75 @@ export const register = createAsyncThunk<
   const user = await UserApi.register({
     email: userArgs.email,
     password: userArgs?.password,
-  });
-  localStorage.setItem("authToken", user.token);
-  return { id: user.id, email: user.email };
-});
+  })
+  localStorage.setItem("authToken", user.token)
+  return { id: user.id, email: user.email }
+})
 
 export const verifyUser = createAsyncThunk<User | null>(
   "users/verify",
   async () => {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken")
     if (token === null) {
-      throw new Error("Could not find token");
+      throw new Error("Could not find token")
     }
-    const user = await UserApi.verify(token);
-    return { id: user.id, email: user.email };
+    const user = await UserApi.verify(token)
+    return { id: user.id, email: user.email }
   }
-);
+)
 
-export const counterSlice = createSlice({
+export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     logout: (state) => {
-      state.data = null;
-      localStorage.removeItem("authToken");
+      state.data = null
+      localStorage.removeItem("authToken")
     },
   },
   extraReducers: (builder) => {
     builder.addCase(login.pending, (state) => {
-      state.data = null;
-      state.loadState = {
-        init: false,
-        pending: true,
-        fulfilled: false,
-        rejected: false,
-      };
-    });
+      state.data = null
+      state.loadState = AsyncStateEnum.PENDING
+    })
 
     builder.addCase(login.fulfilled, (state, action) => {
-      state.data = action.payload;
-      state.loadState = {
-        init: false,
-        pending: false,
-        fulfilled: true,
-        rejected: false,
-      };
-    });
+      state.data = action.payload
+      state.loadState = AsyncStateEnum.FULFILLED
+    })
     builder.addCase(login.rejected, (state, action) => {
-      state.data = null;
-      state.error = `Failed to login user: ${action.error.message}`;
-      state.loadState = {
-        init: false,
-        pending: false,
-        fulfilled: false,
-        rejected: true,
-      };
-    });
+      state.data = null
+      state.error = `Failed to login user: ${action.error.message}`
+      state.loadState = AsyncStateEnum.REJECTED
+    })
     builder.addCase(register.pending, (state) => {
-      state.data = null;
-      state.loadState = {
-        init: false,
-        pending: true,
-        fulfilled: false,
-        rejected: false,
-      };
-    });
+      state.data = null
+      state.loadState = AsyncStateEnum.PENDING
+    })
     builder.addCase(register.fulfilled, (state, action) => {
-      state.data = action.payload;
-      state.loadState = {
-        init: false,
-        pending: false,
-        fulfilled: true,
-        rejected: false,
-      };
-    });
+      state.data = action.payload
+      state.loadState = AsyncStateEnum.FULFILLED
+    })
     builder.addCase(register.rejected, (state, action) => {
-      state.data = null;
-      state.error = `Failed to register user: ${action.error.message}`;
-      state.loadState = {
-        init: false,
-        pending: false,
-        fulfilled: false,
-        rejected: true,
-      };
-    });
+      state.data = null
+      state.error = `Failed to register user: ${action.error.message}`
+      state.loadState = AsyncStateEnum.REJECTED
+    })
     builder.addCase(verifyUser.pending, (state) => {
-      state.data = null;
-      state.loadState = {
-        init: false,
-        pending: true,
-        fulfilled: false,
-        rejected: false,
-      };
-    });
+      state.data = null
+      state.loadState = AsyncStateEnum.PENDING
+    })
     builder.addCase(verifyUser.fulfilled, (state, action) => {
-      state.data = action.payload;
-      state.loadState = {
-        init: false,
-        pending: false,
-        fulfilled: true,
-        rejected: false,
-      };
-    });
+      state.data = action.payload
+      state.loadState = AsyncStateEnum.FULFILLED
+    })
     builder.addCase(verifyUser.rejected, (state) => {
-      state.data = null;
-      state.error = `Failed to verify user`;
-      state.loadState = {
-        init: false,
-        pending: false,
-        fulfilled: false,
-        rejected: true,
-      };
-    });
+      state.data = null
+      state.loadState = AsyncStateEnum.REJECTED
+    })
   },
-});
+})
 
-export const { logout } = counterSlice.actions;
+export const { logout } = userSlice.actions
 
-export default counterSlice.reducer;
+export default userSlice.reducer

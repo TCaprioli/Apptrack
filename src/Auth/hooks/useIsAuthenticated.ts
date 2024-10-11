@@ -1,6 +1,7 @@
 import React from "react"
 import { useAppSelector } from "../../store"
 import { UserState } from "../slice"
+import { AsyncStateEnum } from "../../types"
 
 export const useIsAuthenticated = (): {
   renderWithAuthentication: (args: {
@@ -12,20 +13,26 @@ export const useIsAuthenticated = (): {
   const user = useAppSelector((state) => state.user)
   return {
     renderWithAuthentication: ({ Loading, Fulfilled, Rejected }) =>
-      renderWithAuthentication({ user, Loading, Fulfilled, Rejected }),
+      render({ user, Loading, Fulfilled, Rejected }),
   }
 }
 
-function renderWithAuthentication(args: {
+function render(args: {
   user: UserState
   Loading: React.JSX.Element
   Fulfilled: React.JSX.Element
   Rejected: React.JSX.Element
 }) {
-  if (args.user.loadState.init || args.user.loadState.pending)
+  if (
+    args.user.loadState === AsyncStateEnum.INIT ||
+    args.user.loadState === AsyncStateEnum.PENDING
+  )
     return args.Loading
-  if (args.user.loadState.fulfilled && args.user.data !== null)
+  if (
+    args.user.loadState === AsyncStateEnum.FULFILLED &&
+    args.user.data !== null
+  )
     return args.Fulfilled
-  if (args.user.loadState.rejected) return args.Rejected
+  if (args.user.loadState === AsyncStateEnum.REJECTED) return args.Rejected
   return null
 }
