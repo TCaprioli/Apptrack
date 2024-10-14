@@ -5,33 +5,48 @@ import {
   CreateApplicationParams,
   UpdateApplicationParams,
 } from "../Api/Application"
-import { AsyncState, AsyncStateEnum } from "../types"
+import { AsyncState, AsyncStateEnum, ThunkApi } from "../types"
 
 type Application = { data: ApplicationData; state: AsyncState }
 export type ApplicationState = {
-  application: Application[]
+  collection: Application[]
   error: string | null
   loadState: AsyncState
 }
 const initialState: ApplicationState = {
-  application: [],
+  collection: [],
   error: null,
   loadState: AsyncStateEnum.INIT,
 }
 
-export const getApplicationList = createAsyncThunk<ApplicationData[]>(
+export const getApplicationList = createAsyncThunk<
+  ApplicationData[],
+  undefined,
+  ThunkApi
+>(
   "applications/listApplications",
   async () => {
     return await ApplicationApi.getAllApplications()
+  },
+  {
+    condition: (_, { getState }) => {
+      const { application } = getState()
+      if (
+        application.loadState === AsyncStateEnum.FULFILLED ||
+        application.loadState === AsyncStateEnum.PENDING
+      )
+        return false
+    },
   }
 )
 
-export const getApplication = createAsyncThunk<ApplicationData, { id: number }>(
-  "applications/getApplication",
-  async ({ id }) => {
-    return await ApplicationApi.getApplication(id)
-  }
-)
+export const getApplication = createAsyncThunk<
+  ApplicationData,
+  { id: number },
+  { state: ApplicationState }
+>("applications/getApplication", async ({ id }, thunkApi) => {
+  return await ApplicationApi.getApplication(id)
+})
 
 export const createApplication = createAsyncThunk<
   ApplicationData,
@@ -65,7 +80,7 @@ export const applicationSlice = createSlice({
     })
 
     builder.addCase(getApplicationList.fulfilled, (state, action) => {
-      state.application = action.payload.map((data) => ({
+      state.collection = action.payload.map((data) => ({
         data,
         state: AsyncStateEnum.FULFILLED,
       }))
@@ -76,42 +91,43 @@ export const applicationSlice = createSlice({
       state.loadState = AsyncStateEnum.REJECTED
     })
     builder.addCase(getApplication.pending, (state, action) => {
-      const targetIndex = state.application.findIndex(
+      const targetIndex = state.collection.findIndex(
         (application) => application.data.id === action.meta.arg.id
       )
       if (targetIndex === -1) return
-      state.application[targetIndex].state = AsyncStateEnum.PENDING
+      state.collection[targetIndex].state = AsyncStateEnum.PENDING
     })
     builder.addCase(getApplication.fulfilled, (state, action) => {
-      const targetIndex = state.application.findIndex(
+      const targetIndex = state.collection.findIndex(
         (application) => application.data.id === action.payload.id
       )
       if (targetIndex === -1) {
-        state.application = [
-          ...state.application,
+        state.collection = [
+          ...state.collection,
           {
             data: action.payload,
             state: AsyncStateEnum.FULFILLED,
           },
         ]
       } else {
-        state.application[targetIndex] = {
+        state.collection[targetIndex] = {
           data: action.payload,
           state: AsyncStateEnum.FULFILLED,
         }
       }
     })
     builder.addCase(getApplication.rejected, (state, action) => {
-      const targetIndex = state.application.findIndex(
+      const targetIndex = state.collection.findIndex(
         (application) => application.data.id === action.meta.arg.id
       )
-      if (targetIndex === -1) return
-      state.application[targetIndex].state = AsyncStateEnum.REJECTED
+      if (targetIndex !== -1) {
+        state.collection[targetIndex].state = AsyncStateEnum.REJECTED
+      }
       state.error = `Failed to get application: ${action.error.message}`
     })
     builder.addCase(createApplication.fulfilled, (state, action) => {
-      state.application = [
-        ...state.application,
+      state.collection = [
+        ...state.collection,
         { data: action.payload, state: AsyncStateEnum.FULFILLED },
       ]
       state.loadState = AsyncStateEnum.FULFILLED
@@ -120,49 +136,49 @@ export const applicationSlice = createSlice({
       state.error = `Failed to create application: ${action.error}`
     })
     builder.addCase(updateApplication.pending, (state, action) => {
-      const targetIndex = state.application.findIndex(
+      const targetIndex = state.collection.findIndex(
         (application) => application.data.id === action.meta.arg.id
       )
       if (targetIndex === -1) return
-      state.application[targetIndex].state = AsyncStateEnum.PENDING
+      state.collection[targetIndex].state = AsyncStateEnum.PENDING
     })
     builder.addCase(updateApplication.fulfilled, (state, action) => {
-      const targetIndex = state.application?.findIndex(
+      const targetIndex = state.collection?.findIndex(
         (application) => application.data.id === action.payload.id
       )
       if (targetIndex === -1) return
-      state.application[targetIndex] = {
+      state.collection[targetIndex] = {
         data: action.payload,
         state: AsyncStateEnum.FULFILLED,
       }
     })
     builder.addCase(updateApplication.rejected, (state, action) => {
-      const targetIndex = state.application.findIndex(
+      const targetIndex = state.collection.findIndex(
         (application) => application.data.id === action.meta.arg.id
       )
       if (targetIndex === -1) return
-      state.application[targetIndex].state = AsyncStateEnum.REJECTED
+      state.collection[targetIndex].state = AsyncStateEnum.REJECTED
 
       state.error = `Failed to update application: ${action.error}`
     })
     builder.addCase(deleteApplication.pending, (state, action) => {
-      const targetIndex = state.application.findIndex(
+      const targetIndex = state.collection.findIndex(
         (application) => application.data.id === action.meta.arg.id
       )
       if (targetIndex === -1) return
-      state.application[targetIndex].state = AsyncStateEnum.PENDING
+      state.collection[targetIndex].state = AsyncStateEnum.PENDING
     })
     builder.addCase(deleteApplication.fulfilled, (state, action) => {
-      state.application = state.application.filter(
+      state.collection = state.collection.filter(
         (application) => application.data.id !== action.payload
       )
     })
     builder.addCase(deleteApplication.rejected, (state, action) => {
-      const targetIndex = state.application.findIndex(
+      const targetIndex = state.collection.findIndex(
         (application) => application.data.id === action.meta.arg.id
       )
       if (targetIndex === -1) return
-      state.application[targetIndex].state = AsyncStateEnum.REJECTED
+      state.collection[targetIndex].state = AsyncStateEnum.REJECTED
 
       state.error = `Failed to delete application`
     })
