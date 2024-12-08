@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { User } from "./types"
 import { UserApi } from "../Api/User"
 import { AsyncState, AsyncStateEnum } from "../types"
+import { isAxiosError } from "axios"
 
 export type UserState = {
   data: User | null
@@ -17,13 +18,19 @@ const initialState: UserState = {
 export const login = createAsyncThunk<
   User | null,
   { email: string; password: string }
->("users/login", async (userArgs) => {
-  const user = await UserApi.login({
-    email: userArgs.email,
-    password: userArgs?.password,
-  })
-  localStorage.setItem("authToken", user.token)
-  return { id: user.id, email: user.email }
+>("users/login", async (userArgs, { rejectWithValue }) => {
+  try {
+    const user = await UserApi.login({
+      email: userArgs.email,
+      password: userArgs?.password,
+    })
+    localStorage.setItem("authToken", user.token)
+    return { id: user.id, email: user.email }
+  } catch (error) {
+    return rejectWithValue(
+      isAxiosError(error) ? error.message : "unknown error occurred"
+    )
+  }
 })
 
 export const register = createAsyncThunk<
@@ -71,7 +78,8 @@ export const userSlice = createSlice({
     })
     builder.addCase(login.rejected, (state, action) => {
       state.data = null
-      state.error = `Failed to login user: ${action.error.message}`
+      console.log(action)
+      state.error = `Failed to login user: ${action.payload}`
       state.loadState = AsyncStateEnum.REJECTED
     })
     builder.addCase(register.pending, (state) => {
@@ -84,7 +92,7 @@ export const userSlice = createSlice({
     })
     builder.addCase(register.rejected, (state, action) => {
       state.data = null
-      state.error = `Failed to register user: ${action.error.message}`
+      state.error = `Failed to register user: ${action.payload}`
       state.loadState = AsyncStateEnum.REJECTED
     })
     builder.addCase(verifyUser.pending, (state) => {

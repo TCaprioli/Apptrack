@@ -32,6 +32,7 @@ export const AuthForm = (props: AuthFormProps) => {
 
   return (
     <form onSubmit={handleSubmit}>
+      {userState.error && <p>{userState.error}</p>}
       <div>
         <label htmlFor="email">Email</label>
         <input
@@ -41,7 +42,6 @@ export const AuthForm = (props: AuthFormProps) => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        {userState.error && <p>{userState.error}</p>}
       </div>
 
       <div>

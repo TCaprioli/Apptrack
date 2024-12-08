@@ -10,7 +10,9 @@ export const useGetUser = (): {
   const navigate = useNavigate()
   async function loginUser(args: UserRequest) {
     try {
-      dispatch(login({ email: args.email, password: args.password }))
+      await dispatch(
+        login({ email: args.email, password: args.password })
+      ).unwrap()
       navigate("/applications")
     } catch {
       console.error("login failed")
