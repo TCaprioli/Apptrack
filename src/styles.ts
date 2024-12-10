@@ -1,2 +1,2 @@
 export const stdInputClass =
-  "h-8 rounded-xl ml-4 border-solid border-2 border-slate-400"
+  "h-8 rounded-xl md:ml-4 border-solid border-2 border-slate-400"
