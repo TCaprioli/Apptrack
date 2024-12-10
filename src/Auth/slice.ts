@@ -36,13 +36,19 @@ export const login = createAsyncThunk<
 export const register = createAsyncThunk<
   User | null,
   { email: string; password: string }
->("users/register", async (userArgs) => {
-  const user = await UserApi.register({
-    email: userArgs.email,
-    password: userArgs?.password,
-  })
-  localStorage.setItem("authToken", user.token)
-  return { id: user.id, email: user.email }
+>("users/register", async (userArgs, { rejectWithValue }) => {
+  try {
+    const user = await UserApi.register({
+      email: userArgs.email,
+      password: userArgs?.password,
+    })
+    localStorage.setItem("authToken", user.token)
+    return { id: user.id, email: user.email }
+  } catch (error) {
+    return rejectWithValue(
+      isAxiosError(error) ? error.message : "unknown error occurred"
+    )
+  }
 })
 
 export const verifyUser = createAsyncThunk<User | null>(

@@ -6,6 +6,7 @@ import {
   UpdateApplicationParams,
 } from "../Api/Application"
 import { AsyncState, AsyncStateEnum, ThunkApi } from "../types"
+import { isAxiosError } from "axios"
 
 type Application = { data: ApplicationData; state: AsyncState }
 export type ApplicationState = {
@@ -44,16 +45,31 @@ export const getApplication = createAsyncThunk<
   ApplicationData,
   { id: number },
   { state: ApplicationState }
->("applications/getApplication", async ({ id }, thunkApi) => {
-  return await ApplicationApi.getApplication(id)
+>("applications/getApplication", async ({ id }, { rejectWithValue }) => {
+  try {
+    return await ApplicationApi.getApplication(id)
+  } catch (error) {
+    return rejectWithValue(
+      isAxiosError(error) ? error.message : "unknown error occurred"
+    )
+  }
 })
 
 export const createApplication = createAsyncThunk<
   ApplicationData,
   CreateApplicationParams
->("applications/createApplication", async (newApplication) => {
-  return await ApplicationApi.createApplication(newApplication)
-})
+>(
+  "applications/createApplication",
+  async (newApplication, { rejectWithValue }) => {
+    try {
+      return await ApplicationApi.createApplication(newApplication)
+    } catch (error) {
+      return rejectWithValue(
+        isAxiosError(error) ? error.message : "unknown error occurred"
+      )
+    }
+  }
+)
 
 export const updateApplication = createAsyncThunk<
   ApplicationData,
