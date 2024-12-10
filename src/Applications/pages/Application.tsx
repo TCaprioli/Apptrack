@@ -38,8 +38,8 @@ const ApplicationView = () => {
     dispatch(getApplicationList())
   })
   return (
-    <div>
-      <h1>Applications</h1>
+    <div className="flex flex-col items-center ">
+      {/* <h1 className="py-6">Applications</h1> */}
       <ApplicationForm />
       <ApplicationTable />
     </div>

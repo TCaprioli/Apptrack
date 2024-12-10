@@ -14,7 +14,7 @@ export const ApplicationTable = () => {
       </thead>
       <tbody>
         {applications.map((app) => (
-          <tr>
+          <tr key={app.data.id}>
             <td>{app.data.company}</td>
             <td>{app.data.jobTitle}</td>
             <td>{app.data.status}</td>
