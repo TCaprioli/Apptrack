@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useAppDispatch } from "../../store"
 import { createApplication } from "../slice"
-import { CustomInput } from "../../CommonComponents/CustomInput"
+import { stdInputClass } from "../../styles"
 
 export const ApplicationForm = () => {
   const [jobTitle, setJobTitle] = useState<string>("")
@@ -47,7 +47,8 @@ export const ApplicationForm = () => {
       >
         <label htmlFor="jobTitle" className="flex-auto mb-2">
           Job Title:
-          <CustomInput
+          <input
+            className={stdInputClass}
             type="text"
             id="jobTitle"
             name="jobTitle"
@@ -58,7 +59,8 @@ export const ApplicationForm = () => {
         </label>
         <label htmlFor="company" className="flex-auto mb-2">
           Company:
-          <CustomInput
+          <input
+            className={stdInputClass}
             type="text"
             id="company"
             name="company"
@@ -69,7 +71,8 @@ export const ApplicationForm = () => {
         </label>
         <label htmlFor="location" className="flex-auto mb-2">
           Location:
-          <CustomInput
+          <input
+            className={stdInputClass}
             type="text"
             id="location"
             name="location"
@@ -82,7 +85,8 @@ export const ApplicationForm = () => {
         </label>
         <label htmlFor="applicationDate" className="flex-auto mb-2">
           Application Date:
-          <CustomInput
+          <input
+            className={stdInputClass}
             type="date"
             id="applicationDate"
             name="applicationDate"
