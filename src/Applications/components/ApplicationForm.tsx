@@ -62,7 +62,7 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
   const resetState = () => setApplicationInput(defaultValues)
   return (
     <div className="flex flex-col pb-3 items-center ">
-      <div className="flex flex-row items-center pb-8">
+      <div className="flex flex-row items-center">
         <h2 className="text-xl">
           {props.application ? "Update" : "Add New"} Application
         </h2>
@@ -81,7 +81,7 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
       {error && <p>{error}</p>}
       {display && (
         <form
-          className="flex flex-row flex-wrap w-6/12"
+          className="flex flex-row flex-wrap w-6/12  pt-8"
           onSubmit={async (e) => {
             e.preventDefault()
             try {

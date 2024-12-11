@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../store"
 import { getApplicationList } from "../slice"
 import { ApplicationForm } from "../components/ApplicationForm"
 import { PageCount } from "../components/PageCount"
+import { stdInputClass } from "../../styles"
 
 const APPLICATIONS_PER_PAGE = 10
 
@@ -39,14 +40,18 @@ export const Application = () => {
 }
 
 const ApplicationView = () => {
+  const applications = useAppSelector((state) => state.application.collection)
   const dispatch = useAppDispatch()
   const [page, setPage] = useState(1)
-  const applications = useAppSelector((state) => state.application.collection)
+  const [searchInput, setSearchInput] = useState<string>("")
   const visibleApplications = applications
     .map((applications) => applications.data)
     .slice(
       APPLICATIONS_PER_PAGE * page - APPLICATIONS_PER_PAGE,
       APPLICATIONS_PER_PAGE * page
+    )
+    .filter((app) =>
+      app.company.toLowerCase().includes(searchInput.toLowerCase())
     )
   const [currentApplication, setCurrentApplication] = useState<number | null>(
     null
@@ -61,10 +66,18 @@ const ApplicationView = () => {
         application={currentApplication}
         closeUpdate={() => setCurrentApplication(null)}
       />
-      <ApplicationTable
-        applications={visibleApplications}
-        setCurrentApplication={setCurrentApplication}
-      />
+      <div className="w-full max-w-4xl">
+        <input
+          className={`${stdInputClass} mb-4`}
+          value={searchInput}
+          placeholder="Search Companies..."
+          onChange={(event) => setSearchInput(event.target.value)}
+        />
+        <ApplicationTable
+          applications={visibleApplications}
+          setCurrentApplication={setCurrentApplication}
+        />
+      </div>
       <PageCount
         page={page}
         totalItems={applications.length}

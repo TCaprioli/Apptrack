@@ -6,7 +6,7 @@ type ApplicationTableProps = {
 }
 export const ApplicationTable = (props: ApplicationTableProps) => {
   return (
-    <table className="table-auto border-collapse w-full md:w-9/12 text-center">
+    <table className="table-auto border-collapse w-full text-center">
       <thead>
         <tr>
           <th className="border border-slate-300 bg-slate-200">Company</th>
