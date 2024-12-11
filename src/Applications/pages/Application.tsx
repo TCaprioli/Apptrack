@@ -18,9 +18,14 @@ export const Application = () => {
         Loading: <div>Loading...</div>,
         Fulfilled: <ApplicationView />,
         Rejected: (
-          <div>
-            <p>You need to be logged in to view this page</p>
-            <button onClick={() => navigate(routes.LOGIN)}>
+          <div className="flex flex-col items-center justify-center">
+            <p className="text-xl font-serif">
+              You need to be logged in to view this page
+            </p>
+            <button
+              className="bg-sage m-4 text-white"
+              onClick={() => navigate(routes.LOGIN)}
+            >
               Return to login
             </button>
           </div>

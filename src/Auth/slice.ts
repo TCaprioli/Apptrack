@@ -69,6 +69,7 @@ export const userSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.data = null
+      state.loadState = AsyncStateEnum.REJECTED
       localStorage.removeItem("authToken")
     },
   },

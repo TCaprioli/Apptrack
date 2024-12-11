@@ -94,7 +94,7 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
           <label htmlFor="jobTitle" className="flex-auto mb-2">
             Job Title:
             <input
-              className={stdInputClass}
+              className={`${stdInputClass} md:ml-4`}
               type="text"
               id="jobTitle"
               name="jobTitle"
@@ -111,7 +111,7 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
           <label htmlFor="company" className="flex-auto mb-2">
             Company:
             <input
-              className={stdInputClass}
+              className={`${stdInputClass} md:ml-4`}
               type="text"
               id="company"
               name="company"
@@ -128,7 +128,7 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
           <label htmlFor="location" className="flex-auto mb-2">
             Location:
             <input
-              className={stdInputClass}
+              className={`${stdInputClass} md:ml-4`}
               type="text"
               id="location"
               name="location"
@@ -144,7 +144,7 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
           <label htmlFor="applicationDate" className="flex-auto mb-2">
             Application Date:
             <input
-              className={stdInputClass}
+              className={`${stdInputClass} md:ml-4`}
               type="date"
               id="applicationDate"
               name="applicationDate"
@@ -184,7 +184,7 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
           <div className="flex w-full">
             <button
               type="submit"
-              className="basis-full bg-green-500 text-white flex-1"
+              className="basis-full bg-sage text-white flex-1"
             >
               Submit
             </button>
