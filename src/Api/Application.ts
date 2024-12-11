@@ -10,7 +10,7 @@ export type ApplicationData = {
   jobTitle: string
   company: string
   location: string | null
-  applicationDate: Date | null
+  applicationDate: string | null
   userID: number
   status: string
   notes: string | null

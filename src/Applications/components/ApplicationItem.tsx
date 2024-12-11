@@ -4,7 +4,12 @@ import { deleteApplication } from "../slice"
 import Menu from "../../__assets__/menu.svg?react"
 import { useState } from "react"
 import { useFocusListener } from "../../hooks/useFocusListener"
-export const ApplicationItem = (props: { app: ApplicationData }) => {
+
+type ApplicationItemProps = {
+  app: ApplicationData
+  setCurrentApplication: () => void
+}
+export const ApplicationItem = (props: ApplicationItemProps) => {
   const dispatch = useAppDispatch()
   const [displayMenu, setDisplayMenu] = useState<boolean>(false)
   const { ref } = useFocusListener<HTMLTableCellElement>({
@@ -39,7 +44,12 @@ export const ApplicationItem = (props: { app: ApplicationData }) => {
               <li className="py-1 cursor-pointer hover:bg-white hover:rounded-md">
                 View
               </li>
-              <li className="py-1 cursor-pointer hover:bg-white hover:rounded-md">
+              <li
+                className="py-1 cursor-pointer hover:bg-white hover:rounded-md"
+                onClick={() => {
+                  props.setCurrentApplication()
+                }}
+              >
                 Edit
               </li>
               <li

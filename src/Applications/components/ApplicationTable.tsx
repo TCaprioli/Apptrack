@@ -1,7 +1,9 @@
 import { useAppSelector } from "../../store"
 import { ApplicationItem } from "./ApplicationItem"
-
-export const ApplicationTable = () => {
+type ApplicationTableProps = {
+  setCurrentApplication: (application: number) => void
+}
+export const ApplicationTable = (props: ApplicationTableProps) => {
   const applications = useAppSelector((state) => state.application.collection)
 
   return (
@@ -21,7 +23,13 @@ export const ApplicationTable = () => {
       </thead>
       <tbody className="border border-slate-300">
         {applications.map((app) => (
-          <ApplicationItem app={app.data} key={app.data.id} />
+          <ApplicationItem
+            key={app.data.id}
+            app={app.data}
+            setCurrentApplication={() =>
+              props.setCurrentApplication(app.data.id)
+            }
+          />
         ))}
       </tbody>
     </table>
