@@ -4,9 +4,12 @@ import { Layout } from "../../Layout/Layout"
 import { routes } from "../../routes"
 import { ApplicationTable } from "../components/ApplicationTable"
 import { useEffect, useState } from "react"
-import { useAppDispatch } from "../../store"
+import { useAppDispatch, useAppSelector } from "../../store"
 import { getApplicationList } from "../slice"
 import { ApplicationForm } from "../components/ApplicationForm"
+import { PageCount } from "../components/PageCount"
+
+const APPLICATIONS_PER_PAGE = 10
 
 export const Application = () => {
   const navigate = useNavigate()
@@ -37,7 +40,14 @@ export const Application = () => {
 
 const ApplicationView = () => {
   const dispatch = useAppDispatch()
-
+  const [page, setPage] = useState(1)
+  const applications = useAppSelector((state) => state.application.collection)
+  const visibleApplications = applications
+    .map((applications) => applications.data)
+    .slice(
+      APPLICATIONS_PER_PAGE * page - APPLICATIONS_PER_PAGE,
+      APPLICATIONS_PER_PAGE * page
+    )
   const [currentApplication, setCurrentApplication] = useState<number | null>(
     null
   )
@@ -51,7 +61,16 @@ const ApplicationView = () => {
         application={currentApplication}
         closeUpdate={() => setCurrentApplication(null)}
       />
-      <ApplicationTable setCurrentApplication={setCurrentApplication} />
+      <ApplicationTable
+        applications={visibleApplications}
+        setCurrentApplication={setCurrentApplication}
+      />
+      <PageCount
+        page={page}
+        totalItems={applications.length}
+        increment={() => setPage((prevState) => (prevState += 1))}
+        decrement={() => setPage((prevState) => (prevState -= 1))}
+      />
     </div>
   )
 }

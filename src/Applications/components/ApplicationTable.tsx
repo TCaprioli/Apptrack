@@ -1,11 +1,10 @@
-import { useAppSelector } from "../../store"
+import { ApplicationData } from "../../Api/Application"
 import { ApplicationItem } from "./ApplicationItem"
 type ApplicationTableProps = {
+  applications: ApplicationData[]
   setCurrentApplication: (application: number) => void
 }
 export const ApplicationTable = (props: ApplicationTableProps) => {
-  const applications = useAppSelector((state) => state.application.collection)
-
   return (
     <table className="table-auto border-collapse w-full md:w-9/12 text-center">
       <thead>
@@ -22,13 +21,11 @@ export const ApplicationTable = (props: ApplicationTableProps) => {
         </tr>
       </thead>
       <tbody className="border border-slate-300">
-        {applications.map((app) => (
+        {props.applications.map((app) => (
           <ApplicationItem
-            key={app.data.id}
-            app={app.data}
-            setCurrentApplication={() =>
-              props.setCurrentApplication(app.data.id)
-            }
+            key={app.id}
+            app={app}
+            setCurrentApplication={() => props.setCurrentApplication(app.id)}
           />
         ))}
       </tbody>
