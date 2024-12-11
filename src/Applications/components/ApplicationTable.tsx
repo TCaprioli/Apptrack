@@ -21,7 +21,7 @@ export const ApplicationTable = () => {
       </thead>
       <tbody className="border border-slate-300">
         {applications.map((app) => (
-          <ApplicationItem app={app.data} />
+          <ApplicationItem app={app.data} key={app.data.id} />
         ))}
       </tbody>
     </table>

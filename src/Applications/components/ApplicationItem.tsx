@@ -3,9 +3,13 @@ import { useAppDispatch } from "../../store"
 import { deleteApplication } from "../slice"
 import Menu from "../../__assets__/menu.svg?react"
 import { useState } from "react"
+import { useFocusListener } from "../../hooks/useFocusListener"
 export const ApplicationItem = (props: { app: ApplicationData }) => {
   const dispatch = useAppDispatch()
   const [displayMenu, setDisplayMenu] = useState<boolean>(false)
+  const { ref } = useFocusListener<HTMLTableCellElement>({
+    handleOutOfFocus: () => setDisplayMenu(false),
+  })
   const onDelete = async (id: number) => {
     try {
       await dispatch(deleteApplication({ id })).unwrap()
@@ -15,7 +19,7 @@ export const ApplicationItem = (props: { app: ApplicationData }) => {
   }
 
   return (
-    <tr key={props.app.id}>
+    <tr>
       <td className="border border-slate-300 ">{props.app.company}</td>
       <td className="hidden md:table-cell border border-slate-300 ">
         {props.app.jobTitle}
@@ -24,12 +28,9 @@ export const ApplicationItem = (props: { app: ApplicationData }) => {
         {props.app.location}
       </td>
       <td className="border border-slate-300 ">{props.app.status}</td>
-      <td className="border border-slate-300 text-center relative">
+      <td className="border border-slate-300 text-center relative" ref={ref}>
         {/* TODO: Add favorites */}
-        <button
-          className=" w-14"
-          onClick={() => setDisplayMenu((state) => !state)}
-        >
+        <button className=" w-14" onClick={() => setDisplayMenu(true)}>
           <Menu className="h-4 w-4" />
         </button>
         {displayMenu && (
