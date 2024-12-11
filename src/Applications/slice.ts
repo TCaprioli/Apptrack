@@ -7,6 +7,8 @@ import {
 } from "../Api/Application"
 import { AsyncState, AsyncStateEnum, ThunkApi } from "../types"
 import { isAxiosError } from "axios"
+import { AppDispatch } from "../store"
+import { isEqual } from "lodash"
 
 type Application = { data: ApplicationData; state: AsyncState }
 export type ApplicationState = {
@@ -73,16 +75,37 @@ export const createApplication = createAsyncThunk<
 
 export const updateApplication = createAsyncThunk<
   ApplicationData,
-  UpdateApplicationParams
+  UpdateApplicationParams,
+  {
+    rejectValue: string | unknown
+    state: { application: ApplicationState }
+    dispatch: AppDispatch
+    extra: unknown
+  }
 >(
   "applications/updateApplication",
-  async (application, { rejectWithValue }) => {
+  async (application, { rejectWithValue, getState }) => {
+    const targetApplication = getState().application.collection.find(
+      (app) => app.data.id === application.id
+    )?.data
+
+    const formattedDate = targetApplication?.applicationDate
+      ? new Date(targetApplication.applicationDate)
+      : null
+    if (
+      isEqual(application.applicationDate, formattedDate) &&
+      isEqual(application.company, targetApplication?.company) &&
+      isEqual(application.jobTitle, targetApplication?.jobTitle) &&
+      isEqual(application.location, targetApplication?.location) &&
+      isEqual(application.notes, targetApplication?.notes) &&
+      isEqual(application.status, targetApplication?.status)
+    ) {
+      throw new Error("Must update application before submitting")
+    }
     try {
-      return await ApplicationApi.updateApplication(application)
+      return await ApplicationApi.getApplication(application.id)
     } catch (error) {
-      return rejectWithValue(
-        isAxiosError(error) ? error.message : "unknown error occurred"
-      )
+      return rejectWithValue(isAxiosError(error) ? error.message : error)
     }
   }
 )
@@ -103,7 +126,11 @@ export const deleteApplication = createAsyncThunk<void, { id: number }>(
 export const applicationSlice = createSlice({
   name: "application",
   initialState,
-  reducers: {},
+  reducers: {
+    clearError: (state) => {
+      state.error = null
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getApplicationList.pending, (state) => {
       state.loadState = AsyncStateEnum.PENDING
@@ -164,7 +191,7 @@ export const applicationSlice = createSlice({
       state.loadState = AsyncStateEnum.FULFILLED
     })
     builder.addCase(createApplication.rejected, (state, action) => {
-      state.error = `Failed to create application: ${action.error}`
+      state.error = `Failed to create application: ${action.error.message}`
     })
     builder.addCase(updateApplication.pending, (state, action) => {
       const targetIndex = state.collection.findIndex(
@@ -190,7 +217,7 @@ export const applicationSlice = createSlice({
       if (targetIndex === -1) return
       state.collection[targetIndex].state = AsyncStateEnum.REJECTED
 
-      state.error = `Failed to update application: ${action.error}`
+      state.error = `Failed to update application: ${action.error.message}`
     })
     builder.addCase(deleteApplication.pending, (state, action) => {
       const targetIndex = state.collection.findIndex(
@@ -215,5 +242,7 @@ export const applicationSlice = createSlice({
     })
   },
 })
+
+export const { clearError } = applicationSlice.actions
 
 export default applicationSlice.reducer

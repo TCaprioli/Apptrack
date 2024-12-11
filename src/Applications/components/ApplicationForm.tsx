@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../store"
-import { createApplication, updateApplication } from "../slice"
+import { clearError, createApplication, updateApplication } from "../slice"
 import { stdInputClass } from "../../styles"
 import Up from "../../__assets__/up.svg?react"
 import { ApplicationData } from "../../Api/Application"
@@ -33,9 +33,9 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
       (app) => app.data.id === props.application
     )
   )?.data
+  const error = useAppSelector((state) => state.application.error)
   const [applicationInput, setApplicationInput] =
     useState<ApplicationInput>(defaultValues)
-  const [error, setError] = useState<string | null>(null)
   const [display, setDisplay] = useState<boolean>(true)
   const dispatch = useAppDispatch()
   useSyncExistingApplication({ existingApplication, setApplicationInput })
@@ -58,6 +58,7 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
       ).unwrap()
       resetState()
     }
+    dispatch(clearError())
   }
   const resetState = () => setApplicationInput(defaultValues)
   return (
@@ -78,7 +79,7 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
           )}
         </button>
       </div>
-      {error && <p>{error}</p>}
+      {error && <p className="text-red-500">{error}</p>}
       {display && (
         <form
           className="flex flex-row flex-wrap w-6/12  pt-8"
@@ -86,8 +87,8 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
             e.preventDefault()
             try {
               await onSubmit()
-            } catch (error) {
-              setError(`Failed to submit application: ${error}`)
+            } catch (err) {
+              console.error(err)
             }
           }}
         >
@@ -193,6 +194,7 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
                 className="basis-full bg-rosewood text-white flex-1"
                 onClick={() => {
                   resetState()
+                  dispatch(clearError())
                   props.closeUpdate()
                 }}
               >
