@@ -103,7 +103,7 @@ export const updateApplication = createAsyncThunk<
       throw new Error("Must update application before submitting")
     }
     try {
-      return await ApplicationApi.getApplication(application.id)
+      return await ApplicationApi.updateApplication(application)
     } catch (error) {
       return rejectWithValue(isAxiosError(error) ? error.message : error)
     }
