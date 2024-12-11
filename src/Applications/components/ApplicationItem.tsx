@@ -24,7 +24,7 @@ export const ApplicationItem = (props: ApplicationItemProps) => {
   }
 
   return (
-    <tr>
+    <tr className="hover:bg-slate-200">
       <td className="border border-slate-300 ">{props.app.company}</td>
       <td className="hidden md:table-cell border border-slate-300 ">
         {props.app.jobTitle}

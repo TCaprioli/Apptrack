@@ -6,6 +6,7 @@ export default {
       colors: {
         sage: "#647E65",
         sand: "#AA8A73",
+        rosewood: "#7e6464",
       },
     },
   },

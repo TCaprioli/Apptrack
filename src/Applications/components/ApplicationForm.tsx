@@ -190,7 +190,7 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
             </button>
             {props.application && (
               <button
-                className="basis-full bg-red-500 text-white flex-1"
+                className="basis-full bg-rosewood text-white flex-1"
                 onClick={() => {
                   resetState()
                   props.closeUpdate()
