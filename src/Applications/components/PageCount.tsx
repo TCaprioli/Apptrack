@@ -10,9 +10,13 @@ type PageCountProps = {
 
 export const PageCount = (props: PageCountProps) => {
   useEffect(() => {
-    // Maximum number of items that can ve paginated.
+    // Maximum number of items that can be paginated.
     const maxItems = APPLICATIONS_PER_PAGE * props.page - APPLICATIONS_PER_PAGE
-    if (props.totalItems === maxItems) {
+    if (
+      props.totalItems > 0 &&
+      props.page !== 1 &&
+      props.totalItems === maxItems
+    ) {
       props.decrement()
     }
   }, [props])
