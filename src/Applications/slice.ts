@@ -74,15 +74,29 @@ export const createApplication = createAsyncThunk<
 export const updateApplication = createAsyncThunk<
   ApplicationData,
   UpdateApplicationParams
->("applications/updateApplication", async (application) => {
-  return await ApplicationApi.updateApplication(application)
-})
+>(
+  "applications/updateApplication",
+  async (application, { rejectWithValue }) => {
+    try {
+      return await ApplicationApi.updateApplication(application)
+    } catch (error) {
+      return rejectWithValue(
+        isAxiosError(error) ? error.message : "unknown error occurred"
+      )
+    }
+  }
+)
 
-export const deleteApplication = createAsyncThunk<number, { id: number }>(
+export const deleteApplication = createAsyncThunk<void, { id: number }>(
   "applications/deleteApplication",
-  async ({ id }) => {
-    await ApplicationApi.deleteApplication(id)
-    return id
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      return await ApplicationApi.deleteApplication(id)
+    } catch (error) {
+      return rejectWithValue(
+        isAxiosError(error) ? error.message : "unknown error occurred"
+      )
+    }
   }
 )
 
@@ -117,6 +131,7 @@ export const applicationSlice = createSlice({
       const targetIndex = state.collection.findIndex(
         (application) => application.data.id === action.payload.id
       )
+      // add the data to state if it doesn't exist otherwise update it with current server data
       if (targetIndex === -1) {
         state.collection = [
           ...state.collection,
@@ -186,7 +201,7 @@ export const applicationSlice = createSlice({
     })
     builder.addCase(deleteApplication.fulfilled, (state, action) => {
       state.collection = state.collection.filter(
-        (application) => application.data.id !== action.payload
+        (application) => application.data.id !== action.meta.arg.id
       )
     })
     builder.addCase(deleteApplication.rejected, (state, action) => {
