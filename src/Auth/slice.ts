@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { User } from "./types"
 import { UserApi } from "../Api/User"
 import { AsyncState, AsyncStateEnum } from "../types"
-import { isAxiosError } from "axios"
+import { HttpStatusCode, isAxiosError } from "axios"
 
 export type UserState = {
   data: User | null
@@ -27,9 +27,14 @@ export const login = createAsyncThunk<
     localStorage.setItem("authToken", user.token)
     return { id: user.id, email: user.email }
   } catch (error) {
-    return rejectWithValue(
-      isAxiosError(error) ? error.message : "unknown error occurred"
-    )
+    let formattedError = error
+    if (isAxiosError(error)) {
+      formattedError =
+        error.status === HttpStatusCode.Unauthorized
+          ? "Invalid credentials. Please try again..."
+          : error.message
+    }
+    return rejectWithValue(formattedError)
   }
 })
 
@@ -85,7 +90,6 @@ export const userSlice = createSlice({
     })
     builder.addCase(login.rejected, (state, action) => {
       state.data = null
-      console.log(action)
       state.error = `Failed to login user: ${action.payload}`
       state.loadState = AsyncStateEnum.REJECTED
     })
