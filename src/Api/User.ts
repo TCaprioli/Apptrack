@@ -14,6 +14,7 @@ interface UserApi {
 
 export const UserApi: UserApi = {
   login: async (args) => {
+    console.log(BaseUrl)
     const resp = await axios.post(UserUrl + routes.LOGIN, { ...args })
     return resp.data
   },
