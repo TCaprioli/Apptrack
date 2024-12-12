@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../store"
 import { register } from "../slice"
 import { UserRequest } from "../types"
+import { routes } from "../../routes"
 
 export const useSaveNewUser = (): {
   registerUser: (args: UserRequest) => Promise<string | void>
@@ -15,7 +16,7 @@ export const useSaveNewUser = (): {
   ) {
     dispatch(register({ email: args.email, password: args.password }))
     if (userState.error == null) {
-      navigate("/applications")
+      navigate(routes.APPLICATIONS)
     }
   }
   return {

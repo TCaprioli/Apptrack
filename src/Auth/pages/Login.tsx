@@ -16,7 +16,9 @@ export const Login = () => {
         Fulfilled: (
           <div>
             <p>You're already signed in!</p>
-            <button onClick={() => navigate(-1)}>Go back</button>
+            <button onClick={() => navigate(routes.APPLICATIONS)}>
+              Go back
+            </button>
           </div>
         ),
         Rejected: (

@@ -9,21 +9,25 @@ import { Register } from "./Auth/pages/Register.tsx"
 import { App } from "./App.tsx"
 import "./main.css"
 import { ApplicationViewer } from "./Applications/pages/ApplicationViewer.tsx"
+import { routes } from "./routes.ts"
 
 const router = createBrowserRouter([
   {
-    path: "/login",
+    path: `${routes.LOGIN}`,
     element: <Login />,
   },
   {
-    path: "/register",
+    path: `${routes.REGISTER}`,
     element: <Register />,
   },
   {
-    path: "/applications",
+    path: `${routes.APPLICATIONS}`,
     element: <Application />,
   },
-  { path: "/applications/:applicationId", element: <ApplicationViewer /> },
+  {
+    path: `${routes.APPLICATIONS}:applicationId`,
+    element: <ApplicationViewer />,
+  },
 ])
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

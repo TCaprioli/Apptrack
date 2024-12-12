@@ -1,9 +1,9 @@
 import axios from "axios"
-import { routes } from "../routes"
 import { getToken } from "../utils"
 
 const BaseUrl = import.meta.env.VITE_API_URL
-const ApplicationUrl = BaseUrl + routes.APPLICATIONS
+// TODO: Replace with routes enum when you start the dashboard
+const ApplicationUrl = BaseUrl + "/applications"
 
 export type ApplicationData = {
   id: number

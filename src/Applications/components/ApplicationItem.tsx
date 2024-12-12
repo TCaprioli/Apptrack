@@ -48,7 +48,8 @@ export const ApplicationItem = (props: ApplicationItemProps) => {
                 className="py-1 cursor-pointer hover:bg-white hover:rounded-md"
                 tabIndex={0}
                 onClick={() => {
-                  navigate(`${routes.APPLICATIONS}/${props.app.id}`)
+                  //TODO: Update when route when you add dashboard
+                  navigate(`${routes.APPLICATIONS}${props.app.id}`)
                 }}
               >
                 View

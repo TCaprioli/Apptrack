@@ -62,6 +62,14 @@ export const AuthForm = (props: AuthFormProps) => {
       <button type="submit" className="mt-4 bg-sage text-white">
         Submit
       </button>
+      <button
+        className="ml-4 bg-sand text-white"
+        onClick={() => {
+          props.onSubmit({ email: "test@mail.com", password: "password" })
+        }}
+      >
+        Demo
+      </button>
     </form>
   )
 }

@@ -1,5 +1,5 @@
 export const routes = {
-  APPLICATIONS: "/applications",
+  APPLICATIONS: "/",
   USERS: "/users",
   LOGIN: "/login",
   REGISTER: "/register",
