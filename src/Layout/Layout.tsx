@@ -19,7 +19,7 @@ export const Layout = (props: React.PropsWithChildren) => {
           Loading: <>Loading...</>,
           Fulfilled: (
             <button
-              className="ml-auto bg-red-700 text-white"
+              className="ml-auto bg-sand text-white"
               onClick={() => {
                 dispatch(logout())
                 navigate(routes.LOGIN)
