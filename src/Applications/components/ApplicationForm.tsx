@@ -62,9 +62,9 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
   }
   const resetState = () => setApplicationInput(defaultValues)
   return (
-    <div className="flex flex-col pb-3 items-center ">
+    <div className="flex flex-col pb-8 md:items-center ">
       <div className="flex flex-row items-center">
-        <h2 className="text-xl">
+        <h2 className="text-3xl underline">
           {props.application ? "Update" : "Add New"} Application
         </h2>
         <button
@@ -82,7 +82,7 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
       {error && <p className="text-red-500">{error}</p>}
       {display && (
         <form
-          className="flex flex-row flex-wrap w-6/12  pt-8"
+          className="flex flex-wrap md:w-6/12 pt-8"
           onSubmit={async (e) => {
             e.preventDefault()
             try {
@@ -92,7 +92,10 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
             }
           }}
         >
-          <label htmlFor="jobTitle" className="flex-auto mb-2">
+          <label
+            htmlFor="jobTitle"
+            className="flex flex-auto mb-4 flex-col md:flex-row md:basis-1/2"
+          >
             Job Title:
             <input
               className={`${stdInputClass} md:ml-4`}
@@ -109,7 +112,10 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
               required
             />
           </label>
-          <label htmlFor="company" className="flex-auto mb-2">
+          <label
+            htmlFor="company"
+            className="flex flex-auto mb-4 flex-col md:flex-row md:basis-1/2"
+          >
             Company:
             <input
               className={`${stdInputClass} md:ml-4`}
@@ -126,7 +132,10 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
               required
             />
           </label>
-          <label htmlFor="location" className="flex-auto mb-2">
+          <label
+            htmlFor="location"
+            className="flex flex-auto mb-4 flex-col md:flex-row md:basis-1/2"
+          >
             Location:
             <input
               className={`${stdInputClass} md:ml-4`}
@@ -142,7 +151,10 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
               }
             />
           </label>
-          <label htmlFor="applicationDate" className="flex-auto mb-2">
+          <label
+            htmlFor="applicationDate"
+            className=" flex flex-auto mb-4 flex-col md:flex-row md:basis-1/2 w-full"
+          >
             Application Date:
             <input
               className={`${stdInputClass} md:ml-4`}
@@ -160,7 +172,10 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
             />
           </label>
 
-          <label htmlFor="status" className="flex-auto mb-2">
+          <label
+            htmlFor="status"
+            className="flex flex-auto  flex-col md:flex-row mb-4"
+          >
             Status:
             <select
               id="status"
@@ -172,7 +187,7 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
                   status: e.target.value,
                 }))
               }
-              className="h-8 rounded-xl ml-4 text-center w-32"
+              className="h-8 rounded-xl md:ml-4 text-center w-32"
               required
             >
               <option value="applied">Applied</option>
@@ -191,7 +206,7 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
             </button>
             {props.application && (
               <button
-                className="basis-full bg-rosewood text-white flex-1"
+                className="basis-full bg-rosewood text-white flex-1 ml-4"
                 onClick={() => {
                   resetState()
                   dispatch(clearError())

@@ -48,7 +48,7 @@ const ApplicationViewerView = () => {
     getCurrentApplication()
   })
   return application ? (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center pt-32">
       <div>
         <h1 className="font-serif">{application.company}</h1>
         <h2 className="text-3xl text-slate-500">{application.jobTitle}</h2>
