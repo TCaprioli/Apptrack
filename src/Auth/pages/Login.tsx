@@ -31,6 +31,7 @@ export const Login = () => {
               </p>
 
               <AuthForm
+                allowDemo={true}
                 onSubmit={({ email, password }) =>
                   loginUser({ email, password })
                 }

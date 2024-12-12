@@ -30,6 +30,7 @@ export const Register = () => {
               </p>
 
               <AuthForm
+                allowDemo={false}
                 onSubmit={({ email, password }) =>
                   registerUser({ email, password })
                 }
