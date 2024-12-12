@@ -46,7 +46,7 @@ export const getApplicationList = createAsyncThunk<
 export const getApplication = createAsyncThunk<
   ApplicationData,
   { id: number },
-  { state: ApplicationState }
+  { state: { application: ApplicationState } }
 >("applications/getApplication", async ({ id }, { rejectWithValue }) => {
   try {
     return await ApplicationApi.getApplication(id)

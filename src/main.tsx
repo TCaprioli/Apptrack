@@ -8,6 +8,7 @@ import { store } from "./store.ts"
 import { Register } from "./Auth/pages/Register.tsx"
 import { App } from "./App.tsx"
 import "./main.css"
+import { ApplicationViewer } from "./Applications/pages/ApplicationViewer.tsx"
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
     path: "/applications",
     element: <Application />,
   },
+  { path: "/applications/:applicationId", element: <ApplicationViewer /> },
 ])
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

@@ -4,12 +4,15 @@ import { deleteApplication } from "../slice"
 import Menu from "../../__assets__/menu.svg?react"
 import { useState } from "react"
 import { useFocusListener } from "../../hooks/useFocusListener"
+import { useNavigate } from "react-router-dom"
+import { routes } from "../../routes"
 
 type ApplicationItemProps = {
   app: ApplicationData
   setCurrentApplication: () => void
 }
 export const ApplicationItem = (props: ApplicationItemProps) => {
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const [displayMenu, setDisplayMenu] = useState<boolean>(false)
   const { ref } = useFocusListener<HTMLTableCellElement>({
@@ -44,6 +47,9 @@ export const ApplicationItem = (props: ApplicationItemProps) => {
               <li
                 className="py-1 cursor-pointer hover:bg-white hover:rounded-md"
                 tabIndex={0}
+                onClick={() => {
+                  navigate(`${routes.APPLICATIONS}/${props.app.id}`)
+                }}
               >
                 View
               </li>
