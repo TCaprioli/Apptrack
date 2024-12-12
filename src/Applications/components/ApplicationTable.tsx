@@ -17,7 +17,10 @@ export const ApplicationTable = (props: ApplicationTableProps) => {
             Location
           </th>
           <th className="border border-slate-300 bg-slate-200">Status</th>
-          <th className="border border-slate-300 bg-slate-200 w-16"></th>
+          <th
+            className="border border-slate-300 bg-slate-200 w-16"
+            aria-label="action"
+          ></th>
         </tr>
       </thead>
       <tbody className="border border-slate-300">

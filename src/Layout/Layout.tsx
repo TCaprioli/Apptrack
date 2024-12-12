@@ -11,15 +11,15 @@ export const Layout = (props: React.PropsWithChildren) => {
   return (
     <div>
       <header className="flex flex-row items-center">
-        <Link to={routes.APPLICATIONS}>
-          <Logo className="h-32 w-32" />
+        <Link to={routes.APPLICATIONS} aria-label="home">
+          <Logo className="h-32 w-32" aria-label="logo" />
         </Link>
 
         {renderWithAuthentication({
           Loading: <>Loading...</>,
           Fulfilled: (
             <button
-              className="ml-auto bg-sand text-white"
+              className="ml-auto bg-red-700 text-white"
               onClick={() => {
                 dispatch(logout())
                 navigate(routes.LOGIN)

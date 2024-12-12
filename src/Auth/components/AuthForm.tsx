@@ -33,7 +33,7 @@ export const AuthForm = (props: AuthFormProps) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      {userState.error && <p>{userState.error}</p>}
+      {userState.error && <p className="text-red-500">{userState.error}</p>}
       <div className="flex flex-col">
         <label htmlFor="email">Email</label>
         <input

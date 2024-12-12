@@ -73,9 +73,9 @@ export const ApplicationForm = (props: ApplicationFormProps) => {
           }}
         >
           {display ? (
-            <Up className="h-5 w-5" />
+            <Up className="h-5 w-5" aria-label="up-arrow" />
           ) : (
-            <Up className="rotate-180 h-5 w-5" />
+            <Up className="rotate-180 h-5 w-5" aria-label="down-arrow" />
           )}
         </button>
       </div>

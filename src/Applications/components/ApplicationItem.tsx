@@ -36,12 +36,15 @@ export const ApplicationItem = (props: ApplicationItemProps) => {
       <td className="border border-slate-300 text-center relative" ref={ref}>
         {/* TODO: Add favorites */}
         <button className=" w-14" onClick={() => setDisplayMenu(true)}>
-          <Menu className="h-4 w-4" />
+          <Menu className="h-4 w-4" aria-label="menu button" />
         </button>
         {displayMenu && (
           <div className="absolute border bg-slate-200 w-full rounded-md z-10">
             <ul className="text-center">
-              <li className="py-1 cursor-pointer hover:bg-white hover:rounded-md">
+              <li
+                className="py-1 cursor-pointer hover:bg-white hover:rounded-md"
+                tabIndex={0}
+              >
                 View
               </li>
               <li
@@ -49,12 +52,24 @@ export const ApplicationItem = (props: ApplicationItemProps) => {
                 onClick={() => {
                   props.setCurrentApplication()
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    props.setCurrentApplication()
+                  }
+                }}
+                tabIndex={0}
               >
                 Edit
               </li>
               <li
                 className="py-1 cursor-pointer hover:bg-white hover:rounded-md text-red-600"
                 onClick={() => onDelete(props.app.id)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    onDelete(props.app.id)
+                  }
+                }}
+                tabIndex={0}
               >
                 Delete
               </li>
