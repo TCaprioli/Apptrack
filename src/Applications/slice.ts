@@ -185,8 +185,8 @@ export const applicationSlice = createSlice({
     })
     builder.addCase(createApplication.fulfilled, (state, action) => {
       state.collection = [
-        ...state.collection,
         { data: action.payload, state: AsyncStateEnum.FULFILLED },
+        ...state.collection,
       ]
       state.loadState = AsyncStateEnum.FULFILLED
     })
